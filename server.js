@@ -89,7 +89,6 @@ app.get('/health', async (req, res) => {
   console.log('Health api:', req.headers);
 
     res.status(200).send('healthy!!!');
-  }
 });
 
 
