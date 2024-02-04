@@ -85,6 +85,13 @@ app.post('/registrations', async (req, res) => {
   }
 });
 
+app.get('/health', async (req, res) => {
+  console.log('Health api:', req.headers);
+
+    res.status(200).send('healthy!!!');
+  }
+});
+
 
 // Endpoint for retrieving data from MongoDB
 app.get('/submission', async (req, res) => {
