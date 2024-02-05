@@ -34,12 +34,17 @@ const registrationSchema = new mongoose.Schema({
   name: String,
   phoneNumber: String,
   registrationTime: String,
-  ipAddress: String,
+  ipAddress: String, // Add this line
+
 });
 
 registrationSchema.pre('save', function (next) {
   const currentDate = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
   this.registrationTime = currentDate;
+
+    // Capture IP address
+  this.ipAddress = this.clientIp;
+
   next();
 });
 
@@ -74,9 +79,8 @@ app.post('/registrations', async (req, res) => {
     const newRegistration = new Registration({
       tableNumber,
       name,
-      phoneNumber,
-      ipAddress,
-    });
+      phoneNumber
+      });
 
     await newRegistration.save();
     console.log('Data saved to MongoDB');
