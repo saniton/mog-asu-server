@@ -67,13 +67,14 @@ app.post('/registrations', async (req, res) => {
     const ipAddress = req.clientIp;
     console.log('User IP Address:', ipAddress);
 
-    const { tableNumber, name, phoneNumber } = req.body;
+    const { tableNumber, name, phoneNumber} = req.body;
 
     // Save data to MongoDB
     const newRegistration = new Registration({
       tableNumber,
       name,
       phoneNumber,
+      ipAddress,
     });
 
     await newRegistration.save();
