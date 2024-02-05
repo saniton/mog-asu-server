@@ -34,11 +34,13 @@ const registrationSchema = new mongoose.Schema({
   name: String,
   phoneNumber: String,
   registrationTime: String,
+  ipAddress: String,
 });
 
 registrationSchema.pre('save', function (next) {
   const currentDate = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
   this.registrationTime = currentDate;
+  this.ipAddress = ipAddress;
   next();
 });
 
