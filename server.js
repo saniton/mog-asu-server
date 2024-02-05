@@ -34,6 +34,7 @@ const registrationSchema = new mongoose.Schema({
   name: String,
   phoneNumber: String,
   registrationTime: String,
+  ipAddress: String,
 });
 
 registrationSchema.pre('save', function (next) {
