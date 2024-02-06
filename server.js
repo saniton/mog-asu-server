@@ -176,10 +176,10 @@ app.get('/download-csv', async (req, res) => {
         { id: 'phoneNumber', title: 'Phone Number' },
         { id: 'registrationTime', title: 'Registration Time'},
       ],
-    });console.log('party');
-
+    });
 
     await csvWriter.writeRecords(data);
+console.log('party');
 
     res.attachment(`output_${formattedNextDayForFile}.csv`);  // Set the file name in the response
     res.send('CSV file generated successfully');
