@@ -140,7 +140,6 @@ app.get('/admin', async (req, res) => {
 
 // To Download the data from Mongodb
 app.get('/download-csv', async (req, res) => {
-console.log('dowload-csv');
   let nextDay;
 
 
@@ -171,6 +170,7 @@ console.log('dowload-csv');
 
     const csvWriter = createCsvWriter({
       path: `output_${formattedNextDayForFile}.csv`,  // Use the date parameter for the file name
+console.log('path');
       header: [
         { id: 'tableNumber', title: 'Table Number' },
         { id: 'name', title: 'Name' },
