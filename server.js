@@ -170,14 +170,14 @@ app.get('/download-csv', async (req, res) => {
 
     const csvWriter = createCsvWriter({
       path: `output_${formattedNextDayForFile}.csv`,  // Use the date parameter for the file name
-console.log('party');
       header: [
         { id: 'tableNumber', title: 'Table Number' },
         { id: 'name', title: 'Name' },
         { id: 'phoneNumber', title: 'Phone Number' },
         { id: 'registrationTime', title: 'Registration Time'},
       ],
-    });
+    });console.log('party');
+
 
     await csvWriter.writeRecords(data);
 
