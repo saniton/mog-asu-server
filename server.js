@@ -139,110 +139,56 @@ app.get('/admin', async (req, res) => {
 });
 
 // To Download the data from Mongodb
-// app.get('/download-csv', async (req, res) => {
-//   let nextDay;
-
-
-//   try {
-//     const { date } = req.query;
-//     let query = {};
-
-//     if (date) {
-//       // Parse the incoming date string into a Date object
-//       const selectedDate = new Date(date);
-      
-//       // Calculate the date for the next day
-      
-//       nextDay = new Date(selectedDate);
-//       nextDay.setDate(selectedDate.getDate() + 1);
-
-//       // Format the next day as needed based on your MongoDB date format
-//       const formattedNextDay = nextDay.toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' });
-
-//       // Query for the next day
-//       query = { registrationTime: { $regex: new RegExp(`^${formattedNextDay}`) } };
-//     }
-
-//     const data = await Registration.find(query, { _id: 0 });
-
-//     // Use the next day's date for the file name
-//     const formattedNextDayForFile = nextDay.toISOString().split('T')[0];
-
-//     const csvWriter = createCsvWriter({
-//       path: path.join(__dirname, `output_${formattedNextDayForFile}.csv`),  // Use the full path for the file name
-//       header: [
-//         { id: 'tableNumber', title: 'Table Number' },
-//         { id: 'name', title: 'Name' },
-//         { id: 'phoneNumber', title: 'Phone Number' },
-//         { id: 'registrationTime', title: 'Registration Time'},
-//       ],
-//     });
-
-//     await csvWriter.writeRecords(data);
-// console.log('party');
-
-//     res.attachment(`output_${formattedNextDayForFile}.csv`);  // Set the file name in the response
-//     res.send('CSV file generated successfully');
-//     console.log("file downloaded successfully");
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).send('Internal Server Error');
-//   }
-// });
-
 app.get('/download-csv', async (req, res) => {
   let nextDay;
+
 
   try {
     const { date } = req.query;
     let query = {};
 
     if (date) {
+      // Parse the incoming date string into a Date object
       const selectedDate = new Date(date);
+      
+      // Calculate the date for the next day
+      
       nextDay = new Date(selectedDate);
       nextDay.setDate(selectedDate.getDate() + 1);
 
+      // Format the next day as needed based on your MongoDB date format
       const formattedNextDay = nextDay.toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' });
 
+      // Query for the next day
       query = { registrationTime: { $regex: new RegExp(`^${formattedNextDay}`) } };
     }
 
     const data = await Registration.find(query, { _id: 0 });
 
+    // Use the next day's date for the file name
     const formattedNextDayForFile = nextDay.toISOString().split('T')[0];
-    const filePath = path.join(__dirname, `output_${formattedNextDayForFile}.csv`);
 
     const csvWriter = createCsvWriter({
-      path: filePath,
+      path: path.join(__dirname, `output_${formattedNextDayForFile}.csv`),  // Use the full path for the file name
       header: [
         { id: 'tableNumber', title: 'Table Number' },
         { id: 'name', title: 'Name' },
         { id: 'phoneNumber', title: 'Phone Number' },
-        { id: 'registrationTime', title: 'Registration Time' },
+        { id: 'registrationTime', title: 'Registration Time'},
       ],
     });
 
     await csvWriter.writeRecords(data);
+console.log('party');
 
-    // Send the file as a response
-    res.sendFile(filePath, (err) => {
-      if (err) {
-        console.error(err);
-        res.status(500).send('Internal Server Error');
-      } else {
-        console.log('File sent successfully');
-        fs.unlinkSync(filePath); // Delete the file after sending
-      }
-    });
+    res.attachment(`output_${formattedNextDayForFile}.csv`);  // Set the file name in the response
+    res.send('CSV file generated successfully');
+    console.log("file downloaded successfully");
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');
   }
 });
-
-
-
-
 
 
 
