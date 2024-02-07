@@ -169,7 +169,7 @@ app.get('/download-csv', async (req, res) => {
     const formattedNextDayForFile = nextDay.toISOString().split('T')[0];
 
     const csvWriter = createCsvWriter({
-      path: `output_${formattedNextDayForFile}.csv`,  
+      path: `output_${formattedNextDayForFile}.csv`,  // Use the date parameter for the file name
       header: [
         { id: 'tableNumber', title: 'Table Number' },
         { id: 'name', title: 'Name' },
@@ -179,7 +179,6 @@ app.get('/download-csv', async (req, res) => {
     });
 
     await csvWriter.writeRecords(data);
-console.log('party');
 
     res.attachment(`output_${formattedNextDayForFile}.csv`);  // Set the file name in the response
     res.send('CSV file generated successfully');
