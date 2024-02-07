@@ -169,7 +169,7 @@ app.get('/download-csv', async (req, res) => {
     const formattedNextDayForFile = nextDay.toISOString().split('T')[0];
 
     const csvWriter = createCsvWriter({
-      path: `C:\\Users\\sevilla dsouza\\Desktop\\New folder (5)\\New folder\\output_${formattedNextDayForFile}.csv`,  
+      path: `output_${formattedNextDayForFile}.csv`,  
       header: [
         { id: 'tableNumber', title: 'Table Number' },
         { id: 'name', title: 'Name' },
