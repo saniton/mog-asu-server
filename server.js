@@ -161,7 +161,7 @@ app.get('/admin/download', async (req, res) => {
     const Data = await Registration.find(query);
 
     // Create a CSV file
-    const csvFilePath = path.join(__dirname, 'downloads', `data_${date}.csv`);
+    const csvFilePath = path.join(__dirname, `data_${date}.csv`);
     const csvWriter = createCsvWriter({
       path: csvFilePath,
       header: [
