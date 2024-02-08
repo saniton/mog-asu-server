@@ -139,7 +139,7 @@ app.get('/admin', async (req, res) => {
 });
 
 // Endpoint for downloading data from MongoDB
-app.get('/admin/download', async (req, res) => {
+app.get('/download', async (req, res) => {
   try {
     const { date } = req.query;
     let query = {};
