@@ -138,6 +138,17 @@ app.get('/admin', async (req, res) => {
   }
 });
 
+
+
+
+const downloadsPath = path.join(__dirname, 'downloads');
+
+// Create the 'downloads' directory if it doesn't exist
+if (!fs.existsSync(downloadsPath)) {
+  fs.mkdirSync(downloadsPath);
+}
+
+
 // Endpoint for downloading data from MongoDB
 app.get('/admin/download', async (req, res) => {
   try {
@@ -156,7 +167,7 @@ app.get('/admin/download', async (req, res) => {
     const Data = await Registration.find(query);
 
     // Create a CSV file
-    const csvFilePath = path.join(__dirname, 'downloads', `data_${date}.csv`);
+    const csvFilePath = path.join(__dirname, 'server', `data_${date}.csv`);
     const csvWriter = createCsvWriter({
       path: csvFilePath,
       header: [
