@@ -141,12 +141,6 @@ app.get('/admin', async (req, res) => {
 
 
 
-const downloadsPath = path.join(__dirname, 'downloads');
-
-// Create the 'downloads' directory if it doesn't exist
-if (!fs.existsSync(downloadsPath)) {
-  fs.mkdirSync(downloadsPath);
-}
 
 
 // Endpoint for downloading data from MongoDB
