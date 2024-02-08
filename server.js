@@ -138,56 +138,53 @@ app.get('/admin', async (req, res) => {
   }
 });
 
-// To Download the data from Mongodb
-app.get('/download-csv', async (req, res) => {
-  let nextDay;
-
-
+// Endpoint for downloading data from MongoDB
+app.get('/admin/download', async (req, res) => {
   try {
     const { date } = req.query;
     let query = {};
 
     if (date) {
-      // Parse the incoming date string into a Date object
       const selectedDate = new Date(date);
-      
-      // Calculate the date for the next day
-      
-      nextDay = new Date(selectedDate);
+      const nextDay = new Date(selectedDate);
       nextDay.setDate(selectedDate.getDate() + 1);
-
-      // Format the next day as needed based on your MongoDB date format
       const formattedNextDay = nextDay.toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' });
 
-      // Query for the next day
       query = { registrationTime: { $regex: new RegExp(`^${formattedNextDay}`) } };
     }
 
-    const data = await Registration.find(query, { _id: 0 });
+    const Data = await Registration.find(query);
 
-    // Use the next day's date for the file name
-    const formattedNextDayForFile = nextDay.toISOString().split('T')[0];
-
+    // Create a CSV file
+    const csvFilePath = path.join(__dirname, 'downloads', `data_${date}.csv`);
     const csvWriter = createCsvWriter({
-      path: `output_${formattedNextDayForFile}.csv`,  // Use the date parameter for the file name
+      path: csvFilePath,
       header: [
         { id: 'tableNumber', title: 'Table Number' },
         { id: 'name', title: 'Name' },
         { id: 'phoneNumber', title: 'Phone Number' },
-        { id: 'registrationTime', title: 'Registration Time'},
       ],
     });
 
-    await csvWriter.writeRecords(data);
+    await csvWriter.writeRecords(Data);
 
-    res.attachment(`output_${formattedNextDayForFile}.csv`);  // Set the file name in the response
-    res.send('CSV file generated successfully');
-    console.log("file downloaded successfully");
+    // Send the file for download
+    res.download(csvFilePath, `data_${date}.csv`, (err) => {
+      if (err) {
+        console.error('Error downloading file:', err);
+        res.status(500).json({ error: 'Internal Server Error' });
+      } else {
+        console.log('File downloaded successfully');
+        // Delete the file after sending it
+        fs.unlinkSync(csvFilePath);
+      }
+    });
   } catch (error) {
-    console.error(error);
-    res.status(500).send('Internal Server Error');
+    console.error('Error downloading data from MongoDB:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 
 
 
