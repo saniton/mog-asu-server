@@ -203,7 +203,7 @@ app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
 
   if (username === validUsername && password === validPassword) {
-    const token = jwt.sign({ username }, process.env.SECRET_KEY, { expiresIn: '60s' });
+    const token = jwt.sign({ username }, process.env.SECRET_KEY, { expiresIn: '10m' });
     res.json({ success: true, token });
   } else {
     res.status(401).json({ success: false, message: 'Invalid username or password' });
